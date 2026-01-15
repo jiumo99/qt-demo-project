@@ -12,3 +12,17 @@ Login::~Login()
 {
     delete ui;
 }
+
+void Login::on_btnLogin_clicked()
+{
+    setResult(1);
+    hide();
+}
+
+
+void Login::on_btnexit_clicked()
+{
+    setResult(0);
+    hide();
+}
+
