@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -48,7 +49,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// 新增：实现setOperatorId函数（关键修复点）
 void MainWindow::setOperatorId(int operatorId)
 {
     bookMgr->setOperatorId(operatorId);
@@ -70,4 +70,13 @@ void MainWindow::on_btnrecord_clicked()
 {
     ui->btnrecord->setChecked(true);
     ui->stackedWidget->setCurrentWidget(recordMgr);
+}
+
+void MainWindow::on_btnexit_clicked()
+{
+    if (QMessageBox::question(this, "确认退出", "确定要退出到登录界面吗？",
+                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+        // 关闭当前窗口，程序会退出并返回到main函数
+        this->close();
+    }
 }

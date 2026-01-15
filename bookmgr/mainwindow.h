@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QButtonGroup>  // 添加这行
+#include <QCloseEvent>
 #include "bookmgr.h"
 #include "usermgr.h"
 #include "record.h"
@@ -24,6 +25,7 @@ private slots:
     void on_btnbook_clicked();
     void on_btnuser_clicked();
     void on_btnrecord_clicked();
+    void on_btnexit_clicked();
 
 private:
     Ui::MainWindow *ui;
