@@ -13,21 +13,74 @@
   <property name="windowTitle">
    <string>图书与借阅管理系统</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">/* 改进后的样式表，确保选中状态更明显 */
+QWidget#tool {
+    background-color: rgb(84, 92, 100);
+    border-radius: 5px;
+}
+
+QWidget#tool QToolButton {
+    border: none;
+    background-color: rgb(84, 92, 100);
+    color: white;
+    min-height: 55px;
+    font-size: 14px;
+    font-family: &quot;微软雅黑&quot;;
+    padding: 0 15px;
+    text-align: center;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+QWidget#tool QToolButton:hover {
+    background-color: rgb(96, 104, 112);
+}
+
+QWidget#tool QToolButton:checked {
+    background-color: rgb(67, 74, 80);
+    border-left: 4px solid #409eff;
+    font-weight: bold;
+}
+
+QWidget#tool QToolButton:checked:hover {
+    background-color: rgb(75, 82, 90);
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">QWidget#tool {background-color:rgb(84, 92, 100);}
-QWidget#tool QToolButton{
-border:none;
-background-color:rgb(84, 92, 100); 
-color:white;
-min-height:55px;
-font-size:14px;
-font-family:&quot;微软雅黑&quot;;
-/* 增加内边距：上下0px、左右15px（数值可以按需调大/调小） */
-padding: 0 15px;
-text-align: center;
+    <string notr="true">/* 改进后的样式表，确保选中状态更明显 */
+QWidget#tool {
+    background-color: rgb(84, 92, 100);
+    border-radius: 5px;
 }
-QWidget#tool QToolButton:checked{background-color:rgb(67,74,80);}</string>
+
+QWidget#tool QToolButton {
+    border: none;
+    background-color: rgb(84, 92, 100);
+    color: white;
+    min-height: 55px;
+    font-size: 14px;
+    font-family: &quot;微软雅黑&quot;;
+    padding: 0 15px;
+    text-align: center;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+QWidget#tool QToolButton:hover {
+    background-color: rgb(96, 104, 112);
+}
+
+QWidget#tool QToolButton:checked {
+    background-color: rgb(67, 74, 80);
+    border-left: 4px solid #409eff;
+    font-weight: bold;
+}
+
+QWidget#tool QToolButton:checked:hover {
+    background-color: rgb(75, 82, 90);
+}</string>
    </property>
    <layout class="QGridLayout" name="gridLayout_3">
     <property name="leftMargin">

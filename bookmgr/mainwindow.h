@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QButtonGroup>  // 添加这行
 #include "bookmgr.h"
 #include "usermgr.h"
 #include "record.h"
@@ -17,7 +18,6 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    // 新增：声明setOperatorId函数（关键修复点）
     void setOperatorId(int operatorId);
 
 private slots:
@@ -30,6 +30,7 @@ private:
     Bookmgr *bookMgr;
     usermgr *userMgr;
     Record *recordMgr;
+    QButtonGroup *btnGroup;  // 新增：按钮组
 };
 
 #endif // MAINWINDOW_H

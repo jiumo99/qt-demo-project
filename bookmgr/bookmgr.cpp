@@ -337,36 +337,40 @@ void Bookmgr::on_btnreturn_clicked()
     if (!ok || useridStr.isEmpty()) return;
     int user_id = useridStr.toInt();
 
-    // 执行还书
+    // 执行还书（增加SQL执行结果校验）
     bool success = dbHelper->returnBook(book_id, user_id);
     if (success) {
-        // 查询罚金信息
+        // 强制重新查询，确保获取最新的归还状态
         QSqlQuery query;
         query.prepare(R"(
-            SELECT overdue_days, fine_amount FROM BorrowRecord
+            SELECT overdue_days, fine_amount, borrow_status FROM BorrowRecord
             WHERE book_id=:book_id AND user_id=:user_id AND borrow_status IN ('returned', 'overdue')
             ORDER BY return_date DESC LIMIT 1
         )");
         query.bindValue(":book_id", book_id);
         query.bindValue(":user_id", user_id);
-        query.exec();
-        query.next();
-        int overdue_days = query.value("overdue_days").toInt();
-        double fine_amount = query.value("fine_amount").toDouble();
+        // 确保查询成功才显示弹窗
+        if (query.exec() && query.next()) {
+            int overdue_days = query.value("overdue_days").toInt();
+            double fine_amount = query.value("fine_amount").toDouble();
 
-        QString msg = QString("还书成功！\n归还日期：%1").arg(QDate::currentDate().toString("yyyy-MM-dd"));
-        if (overdue_days > 0) {
-            msg += QString("\n逾期天数：%1天\n应缴罚金：%2元").arg(overdue_days).arg(fine_amount, 0, 'f', 2);
+            QString msg = QString("还书成功！\n归还日期：%1").arg(QDate::currentDate().toString("yyyy-MM-dd"));
+            if (overdue_days > 0) {
+                msg += QString("\n逾期天数：%1天\n应缴罚金：%2元").arg(overdue_days).arg(fine_amount, 0, 'f', 2);
+            }
+            QMessageBox::information(this, "成功", msg);
+            bookModel->select(); // 刷新图书库存
+            // ========== 确保信号发射：放在查询成功后，万无一失 ==========
+            emit borrowReturnSuccess();
+        } else {
+            QMessageBox::warning(this, "提示", "还书成功，但查询状态失败！");
+            bookModel->select();
+            emit borrowReturnSuccess(); // 即使查询失败，也发射信号刷新
         }
-        QMessageBox::information(this, "成功", msg);
-        bookModel->select();
-        // ========== 新增：发射还书成功信号 ==========
-        emit borrowReturnSuccess();
     } else {
         QMessageBox::critical(this, "失败", "还书失败（无匹配借阅记录）！");
     }
 }
-
 // 筛选图书
 void Bookmgr::on_selectEdit_textChanged(const QString &arg1)
 {
