@@ -43,6 +43,7 @@ void Login::on_btnLogin_clicked()
 
 void Login::on_btnexit_clicked()
 {
+    // 设置为拒绝状态，这样main.cpp中的循环会退出
     setResult(0);
     hide();
 }

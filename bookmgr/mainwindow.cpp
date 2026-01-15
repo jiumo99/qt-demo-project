@@ -76,7 +76,7 @@ void MainWindow::on_btnexit_clicked()
 {
     if (QMessageBox::question(this, "确认退出", "确定要退出到登录界面吗？",
                               QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
-        // 关闭当前窗口，程序会退出并返回到main函数
+        // 直接关闭主窗口，程序会回到main.cpp中的循环，重新显示登录界面
         this->close();
     }
 }
