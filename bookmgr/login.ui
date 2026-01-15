@@ -14,34 +14,138 @@
    <string>登录</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/* 对应“title”标签（设置大标题字体） */
+   <string notr="true">/* 主窗口背景 - 浅灰渐变 */
+QWidget {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                stop:0 #f5f7fa, stop:1 #c3cfe2);
+}
+
+/* 标题样式 - 调整字体大小确保显示完整 */
 QLabel#title {
-    font: 38px &quot;方正姚体&quot;;
+    font: bold 28px &quot;方正姚体&quot;, &quot;Microsoft YaHei&quot;;
+    color: #2c3e50;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+    margin: 0;
+    border-bottom: 2px solid qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                            stop:0 #409eff, stop:1 #67c23a);
+    letter-spacing: 1px;
+    min-height: 40px;  /* 确保足够高度 */
 }
 
-/* 对应“name”“password”标签（设置提示文字字体） */
+/* 标签样式 - 减小字体并调整内边距 */
 QLabel#name, QLabel#password {
-    font: 18px &quot;楷体&quot;;
+    font: 16px &quot;楷体&quot;, &quot;KaiTi&quot;, &quot;Microsoft YaHei&quot;;
+    color: #606266;
+    font-weight: 500;
+    padding: 6px 0;
+    margin: 3px 0;
+    border-left: 3px solid #409eff;
+    padding-left: 8px;
+    background: linear-gradient(to right, rgba(64, 158, 255, 0.05), transparent);
+    min-height: 24px;  /* 确保标签高度 */
 }
 
-/* 对应“useredit”“passwordedit”输入框（设置输入框样式） */
+/* 输入框样式 - 调整高度和字体 */
 QLineEdit {
-    border-radius:4px;
-    min-height:25px;
-    border:1px solid gray;
+    border-radius: 6px;
+    min-height: 30px;
+    min-width: 200px;  /* 确保输入框宽度 */
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #303133;
+    background-color: white;
+    border: 1px solid #dcdfe6;
+    transition: all 0.3s;
 }
 
-/* 对应“btnLogin”“btnExit”按钮（设置按钮样式） */
+QLineEdit:hover {
+    border-color: #c0c4cc;
+}
+
+QLineEdit:focus {
+    border-color: #409eff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+    background-color: #f8f9fa;
+}
+
+QLineEdit#useredit:focus, QLineEdit#passwordedit:focus {
+    border-color: #67c23a;
+}
+
+/* 按钮样式 - 调整内边距 */
 QPushButton {
-    border-radius:4px;
-    background:#409eff;
-    color:white;
-    font-size:14px;
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    min-height: 30px;
+    min-width: 80px;  /* 确保按钮最小宽度 */
+    border: none;
+    transition: all 0.3s;
+    cursor: pointer;
 }
 
-/* 对应“widget_2”容器（设置背景为白色，若你想给其他QWidget设背景，替换成widget_3即可） */
+/* 登录按钮 */
+QPushButton#btnLogin {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                               stop:0 #409eff, stop:1 #66b1ff);
+    color: white;
+    box-shadow: 0 2px 6px rgba(64, 158, 255, 0.3);
+}
+
+QPushButton#btnLogin:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                               stop:0 #66b1ff, stop:1 #409eff);
+    box-shadow: 0 3px 8px rgba(64, 158, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+QPushButton#btnLogin:pressed {
+    background: #3a8ee6;
+    box-shadow: 0 1px 3px rgba(64, 158, 255, 0.3);
+    transform: translateY(0);
+}
+
+/* 退出按钮 */
+QPushButton#btnExit {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                               stop:0 #f56c6c, stop:1 #f78989);
+    color: white;
+    box-shadow: 0 2px 6px rgba(245, 108, 108, 0.3);
+}
+
+QPushButton#btnExit:hover {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                               stop:0 #f78989, stop:1 #f56c6c);
+    box-shadow: 0 3px 8px rgba(245, 108, 108, 0.4);
+    transform: translateY(-1px);
+}
+
+QPushButton#btnExit:pressed {
+    background: #dd6161;
+    box-shadow: 0 1px 3px rgba(245, 108, 108, 0.3);
+    transform: translateY(0);
+}
+
+/* 容器样式 - 增加内边距确保内容不贴边 */
 QWidget#widget_2 {
-    background:white;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ebeef5;
+    padding: 25px 30px;  /* 增加内边距 */
+}
+
+/* 如果您发现文字仍然显示不全，可以尝试添加这些通用样式 */
+QLabel {
+    padding: 2px 4px;  /* 给所有标签添加一点内边距 */
+}
+
+/* 如果是布局问题，可以添加布局容器样式 */
+QHBoxLayout, QVBoxLayout, QGridLayout {
+    spacing: 10px;  /* 设置布局间距 */
+    margin: 8px;    /* 设置布局边距 */
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -67,6 +171,112 @@ QWidget#widget_2 {
        <width>16777215</width>
        <height>16777215</height>
       </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/* 主窗口背景 */
+QWidget {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                stop:0 #f5f7fa, stop:1 #c3cfe2);
+}
+
+/* 标题样式 */
+QLabel#title {
+    font: bold 28px &quot;方正姚体&quot;, &quot;Microsoft YaHei&quot;;
+    color: #2c3e50;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+    margin: 0;
+    border-bottom: 2px solid qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                                            stop:0 #409eff, stop:1 #67c23a);
+    letter-spacing: 1px;
+    min-height: 40px;
+}
+
+/* 标签样式 */
+QLabel#name, QLabel#password {
+    font: 16px &quot;楷体&quot;, &quot;KaiTi&quot;, &quot;Microsoft YaHei&quot;;
+    color: #606266;
+    font-weight: 500;
+    padding: 6px 0;
+    margin: 3px 0;
+    border-left: 3px solid #409eff;
+    padding-left: 8px;
+    background: linear-gradient(to right, rgba(64, 158, 255, 0.05), transparent);
+    min-height: 24px;
+}
+
+/* 输入框样式 */
+QLineEdit {
+    border-radius: 6px;
+    min-height: 30px;
+    min-width: 200px;
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #303133;
+    background-color: white;
+    border: 1px solid #dcdfe6;
+    transition: all 0.3s;
+}
+
+QLineEdit:hover {
+    border-color: #c0c4cc;
+}
+
+QLineEdit:focus {
+    border-color: #409eff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+    background-color: #f8f9fa;
+}
+
+/* 按钮通用样式 - 蓝色 */
+QPushButton {
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    min-height: 30px;
+    min-width: 80px;
+    border: none;
+    color: white;
+    background-color: #409eff; /* 默认蓝色背景 */
+}
+
+/* 登录按钮 - btnLogin (注意Login首字母大写) */
+QPushButton#btnLogin {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                               stop:0 #2463eb, stop:1 #409eff);
+    box-shadow: 0 2px 6px rgba(64, 158, 255, 0.3);
+}
+
+/* 退出按钮 - btnexit (注意exit全小写) */
+QPushButton#btnexit {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                               stop:0 #409eff, stop:1 #79bbff);
+    box-shadow: 0 2px 6px rgba(121, 187, 255, 0.3);
+}
+
+/* 按钮悬停效果 */
+QPushButton#btnLogin:hover, QPushButton#btnexit:hover {
+    background: #66b1ff;
+    box-shadow: 0 3px 8px rgba(64, 158, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+/* 按钮按下效果 */
+QPushButton#btnLogin:pressed, QPushButton#btnexit:pressed {
+    background: #3a8ee6;
+    box-shadow: 0 1px 3px rgba(64, 158, 255, 0.3);
+    transform: translateY(0);
+}
+
+/* 容器样式 */
+QWidget#widget_2 {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ebeef5;
+    padding: 25px 30px;
+}</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <property name="leftMargin">
@@ -158,7 +368,7 @@ QWidget#widget_2 {
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>50</height>
+             <height>60</height>
             </size>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
