@@ -1,28 +1,23 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include "login.h"
-#include "dbhelper.h"  // 包含DBHelper头文件
+#include "dbhelper.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
-    // 测试数据库连接
-    DBHelper::getInstance()->openDatabase();
-
-    Login dlg;
+    Login dlg; // 登录对话框已内部创建 DBHelper，无需额外创建
     int ret = dlg.exec();
-    if(1 == ret)
+
+    if (ret == 1) // 登录成功
     {
         MainWindow w;
         w.show();
         return a.exec();
     }
-    if(0 == ret)
+    else if (ret == 0) // 退出登录
     {
-        DBHelper::getInstance()->closeDatabase();  // 退出时关闭数据库
         exit(0);
-        return 0;
     }
     return 0;
 }

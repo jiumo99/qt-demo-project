@@ -1,32 +1,36 @@
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+QT += core gui widgets sql charts
 CONFIG += c++17
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+TARGET = BookBorrowSystem
+TEMPLATE = app
 
 SOURCES += \
+    bookmgr.cpp \
+    dbhelper.cpp \
     login.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    record.cpp \
+    usermgr.cpp
 
 HEADERS += \
+    bookmgr.h \
+    dbhelper.h \
     login.h \
-    mainwindow.h
+    mainwindow.h \
+    record.h \
+    usermgr.h
 
 FORMS += \
+    bookmgr.ui \
     login.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    record.ui \
+    usermgr.ui
+
+RC_FILE = $$PWD/res/app.rc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-DISTFILES +=
-
-RESOURCES += \
-    res/res.qrc

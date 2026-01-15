@@ -2,6 +2,7 @@
 #define LOGIN_H
 
 #include <QDialog>
+#include "dbhelper.h"
 
 namespace Ui {
 class Login;
