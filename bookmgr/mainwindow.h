@@ -1,5 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+
 #include <QMainWindow>
 #include "bookmgr.h"
 #include "usermgr.h"
@@ -12,16 +13,16 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    // 新增：声明setOperatorId函数（关键修复点）
+    void setOperatorId(int operatorId);
 
 private slots:
-    // 切换到图书管理
     void on_btnbook_clicked();
-    // 切换到读者管理
     void on_btnuser_clicked();
-    // 切换到借阅管理
     void on_btnrecord_clicked();
 
 private:

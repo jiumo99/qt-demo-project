@@ -6,12 +6,14 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Login dlg; // 登录对话框已内部创建 DBHelper，无需额外创建
+    Login dlg;
     int ret = dlg.exec();
-
     if (ret == 1) // 登录成功
     {
         MainWindow w;
+        // 获取登录用户ID并设置为操作员ID
+        int operatorId = dlg.getLoggedInUserId();
+        w.setOperatorId(operatorId);
         w.show();
         return a.exec();
     }

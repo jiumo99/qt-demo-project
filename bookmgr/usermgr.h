@@ -19,11 +19,8 @@ public:
     ~usermgr();
 
 private slots:
-    // 搜索用户
     void on_selectuserEdit_textChanged(const QString &arg1);
-    // 删除用户
-    void on_btndelectuser_clicked(); // 注意：UI控件名是btndelectuser（可能笔误，按原UI保留）
-    // 导入用户（CSV格式）
+    void on_btndelectuser_clicked();
     void on_btnimportuser_clicked();
 
 private:
@@ -31,9 +28,7 @@ private:
     DBHelper *dbHelper;
     QSqlTableModel *userModel;
     QSortFilterProxyModel *proxyModel;
-
     void initModel();
     int getSelectedUserId();
 };
-
 #endif // USERMGR_H

@@ -6,14 +6,12 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("图书与借阅管理系统");
+    // 初始化三个子界面
+    bookMgr = new Bookmgr();
+    userMgr = new usermgr();
+    recordMgr = new Record();
 
-    // 初始化三个功能界面
-    bookMgr = new Bookmgr(this);
-    userMgr = new usermgr(this);
-    recordMgr = new Record(this);
-
-    // 添加到StackedWidget
+    // 将子界面添加到主窗口的stackedWidget
     ui->stackedWidget->addWidget(bookMgr);
     ui->stackedWidget->addWidget(userMgr);
     ui->stackedWidget->addWidget(recordMgr);
@@ -27,6 +25,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// 新增：实现setOperatorId函数（关键修复点）
+void MainWindow::setOperatorId(int operatorId)
+{
+    bookMgr->setOperatorId(operatorId);
+}
+
+// 原有槽函数不变
 void MainWindow::on_btnbook_clicked()
 {
     ui->stackedWidget->setCurrentWidget(bookMgr);

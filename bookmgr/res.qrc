@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/app.ico</file>
+        <file>res/app.rc</file>
+        <file>res/ftool.svg</file>
+        <file>res/logo.png</file>
+        <file>res/res.qrc</file>
+        <file>res/tool.svg</file>
+        <file>res/whitetool.svg</file>
+    </qresource>
+</RCC>

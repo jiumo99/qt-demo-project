@@ -2,11 +2,12 @@
 #define LOGIN_H
 
 #include <QDialog>
-#include "dbhelper.h"
 
 namespace Ui {
 class Login;
 }
+
+class DBHelper; // 前置声明
 
 class Login : public QDialog
 {
@@ -15,10 +16,10 @@ class Login : public QDialog
 public:
     explicit Login(QWidget *parent = nullptr);
     ~Login();
+    int getLoggedInUserId() const;
 
 private slots:
     void on_btnLogin_clicked();
-
     void on_btnexit_clicked();
 
 private:

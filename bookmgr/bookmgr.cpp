@@ -6,52 +6,94 @@
 #include <QInputDialog>
 
 // ========== 图书编辑对话框实现 ==========
-BookEditDialog::BookEditDialog(QWidget *parent, bool isAdd, int bookid)
+BookEditDialog::BookEditDialog(QWidget *parent, bool isAdd, int book_id)
     : QDialog(parent)
     , m_isAdd(isAdd)
-    , m_bookid(bookid)
+    , m_book_id(book_id)
 {
     setWindowTitle(isAdd ? "添加图书" : "修改图书");
-    setFixedSize(400, 350);
+    setFixedSize(500, 550); // 扩大窗口容纳新增字段
 
-    // 布局与控件
+    // 布局与控件（按新表字段顺序排列）
     QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(10);
     layout->setContentsMargins(20, 20, 20, 20);
 
+    // 1. 基础字段
     layout->addWidget(new QLabel("图书ID："), 0, 0);
-    leBookid = new QLineEdit(this);
-    leBookid->setEnabled(isAdd); // 修改模式下ID不可编辑
-    layout->addWidget(leBookid, 0, 1);
+    leBookId = new QLineEdit(this);
+    leBookId->setEnabled(isAdd);
+    layout->addWidget(leBookId, 0, 1);
 
-    layout->addWidget(new QLabel("类型1："), 1, 0);
-    leType1 = new QLineEdit(this);
-    layout->addWidget(leType1, 1, 1);
+    layout->addWidget(new QLabel("ISBN："), 1, 0);
+    leIsbn = new QLineEdit(this);
+    layout->addWidget(leIsbn, 1, 1);
 
-    layout->addWidget(new QLabel("类型2："), 2, 0);
-    leType2 = new QLineEdit(this);
-    layout->addWidget(leType2, 2, 1);
+    layout->addWidget(new QLabel("图书名称："), 2, 0);
+    leBookName = new QLineEdit(this);
+    layout->addWidget(leBookName, 2, 1);
 
-    layout->addWidget(new QLabel("类型3："), 3, 0);
-    leType3 = new QLineEdit(this);
-    layout->addWidget(leType3, 3, 1);
+    layout->addWidget(new QLabel("作者："), 3, 0);
+    leAuthor = new QLineEdit(this);
+    layout->addWidget(leAuthor, 3, 1);
 
-    layout->addWidget(new QLabel("图片路径："), 4, 0);
-    lePic = new QLineEdit(this);
-    layout->addWidget(lePic, 4, 1);
+    layout->addWidget(new QLabel("出版社："), 4, 0);
+    lePublisher = new QLineEdit(this);
+    layout->addWidget(lePublisher, 4, 1);
 
-    layout->addWidget(new QLabel("图书名称："), 5, 0);
-    leName = new QLineEdit(this);
-    layout->addWidget(leName, 5, 1);
+    layout->addWidget(new QLabel("出版日期："), 5, 0);
+    dePublishDate = new QDateEdit(this);
+    dePublishDate->setCalendarPopup(true);
+    dePublishDate->setDate(QDate::currentDate());
+    layout->addWidget(dePublishDate, 5, 1);
 
-    layout->addWidget(new QLabel("出版社："), 6, 0);
-    lePress = new QLineEdit(this);
-    layout->addWidget(lePress, 6, 1);
+    // 2. 分类字段
+    layout->addWidget(new QLabel("分类："), 6, 0);
+    leCategory = new QLineEdit(this);
+    layout->addWidget(leCategory, 6, 1);
 
-    layout->addWidget(new QLabel("库存数量："), 7, 0);
-    leCnt = new QLineEdit(this);
-    leCnt->setValidator(new QIntValidator(0, 999, this));
-    layout->addWidget(leCnt, 7, 1);
+    layout->addWidget(new QLabel("子分类："), 7, 0);
+    leSubCategory = new QLineEdit(this);
+    layout->addWidget(leSubCategory, 7, 1);
+
+    layout->addWidget(new QLabel("标签："), 8, 0);
+    leTags = new QLineEdit(this);
+    layout->addWidget(leTags, 8, 1);
+
+    // 3. 价格与库存
+    layout->addWidget(new QLabel("价格："), 9, 0);
+    dsbPrice = new QDoubleSpinBox(this);
+    dsbPrice->setRange(0.00, 9999.99);
+    dsbPrice->setDecimals(2);
+    layout->addWidget(dsbPrice, 9, 1);
+
+    layout->addWidget(new QLabel("库存数量："), 10, 0);
+    sbStock = new QSpinBox(this);
+    sbStock->setRange(0, 999);
+    layout->addWidget(sbStock, 10, 1);
+
+    // 4. 状态与费率
+    layout->addWidget(new QLabel("图书状态："), 11, 0);
+    cbBookStatus = new QComboBox(this);
+    cbBookStatus->addItems({"available", "damaged", "lost"});
+    layout->addWidget(cbBookStatus, 11, 1);
+
+    layout->addWidget(new QLabel("逾期费率(元/天)："), 12, 0);
+    dsbOverdueFeeRate = new QDoubleSpinBox(this);
+    dsbOverdueFeeRate->setRange(0.00, 10.00);
+    dsbOverdueFeeRate->setDecimals(2);
+    dsbOverdueFeeRate->setValue(0.50);
+    layout->addWidget(dsbOverdueFeeRate, 12, 1);
+
+    // 5. 其他字段
+    layout->addWidget(new QLabel("封面路径："), 13, 0);
+    leCoverPath = new QLineEdit(this);
+    layout->addWidget(leCoverPath, 13, 1);
+
+    layout->addWidget(new QLabel("描述："), 14, 0);
+    teDescription = new QTextEdit(this);
+    teDescription->setMaximumHeight(60);
+    layout->addWidget(teDescription, 14, 1);
 
     // 按钮
     btnOk = new QPushButton("确定", this);
@@ -60,7 +102,7 @@ BookEditDialog::BookEditDialog(QWidget *parent, bool isAdd, int bookid)
     btnLayout->addStretch();
     btnLayout->addWidget(btnOk);
     btnLayout->addWidget(btnCancel);
-    layout->addLayout(btnLayout, 8, 0, 1, 2);
+    layout->addLayout(btnLayout, 15, 0, 1, 2);
 
     // 绑定信号
     connect(btnOk, &QPushButton::clicked, this, &BookEditDialog::accept);
@@ -71,15 +113,22 @@ BookEditDialog::BookEditDialog(QWidget *parent, bool isAdd, int bookid)
         DBHelper db;
         QSqlQuery query = db.queryAllBooks();
         while (query.next()) {
-            if (query.value("bookid").toInt() == bookid) {
-                leBookid->setText(QString::number(bookid));
-                leType1->setText(query.value("type1").toString());
-                leType2->setText(query.value("type2").toString());
-                leType3->setText(query.value("type3").toString());
-                lePic->setText(query.value("pic").toString());
-                leName->setText(query.value("name").toString());
-                lePress->setText(query.value("press").toString());
-                leCnt->setText(query.value("cnt").toString());
+            if (query.value("book_id").toInt() == book_id) {
+                leBookId->setText(QString::number(book_id));
+                leIsbn->setText(query.value("isbn").toString());
+                leBookName->setText(query.value("book_name").toString());
+                leAuthor->setText(query.value("author").toString());
+                lePublisher->setText(query.value("publisher").toString());
+                dePublishDate->setDate(query.value("publish_date").toDate());
+                leCategory->setText(query.value("category").toString());
+                leSubCategory->setText(query.value("sub_category").toString());
+                leTags->setText(query.value("tags").toString());
+                dsbPrice->setValue(query.value("price").toDouble());
+                sbStock->setValue(query.value("stock").toInt());
+                cbBookStatus->setCurrentText(query.value("book_status").toString());
+                dsbOverdueFeeRate->setValue(query.value("overdue_fee_rate").toDouble());
+                leCoverPath->setText(query.value("cover_path").toString());
+                teDescription->setText(query.value("description").toString());
                 break;
             }
         }
@@ -89,14 +138,21 @@ BookEditDialog::BookEditDialog(QWidget *parent, bool isAdd, int bookid)
 QStringList BookEditDialog::getBookInfo() const
 {
     QStringList info;
-    info << leBookid->text()
-         << leType1->text()
-         << leType2->text()
-         << leType3->text()
-         << lePic->text()
-         << leName->text()
-         << lePress->text()
-         << leCnt->text();
+    info << leBookId->text()          // 0: book_id
+         << leIsbn->text()            // 1: isbn
+         << leBookName->text()        // 2: book_name
+         << leAuthor->text()          // 3: author
+         << lePublisher->text()       // 4: publisher
+         << dePublishDate->date().toString("yyyy-MM-dd") // 5: publish_date
+         << leCategory->text()        // 6: category
+         << leSubCategory->text()     // 7: sub_category
+         << leTags->text()            // 8: tags
+         << QString::number(dsbPrice->value()) // 9: price
+         << QString::number(sbStock->value())  // 10: stock
+         << cbBookStatus->currentText() // 11: book_status
+         << QString::number(dsbOverdueFeeRate->value()) // 12: overdue_fee_rate
+         << leCoverPath->text()       // 13: cover_path
+         << teDescription->toPlainText(); // 14: description
     return info;
 }
 
@@ -104,12 +160,11 @@ QStringList BookEditDialog::getBookInfo() const
 Bookmgr::Bookmgr(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Bookmgr)
+    , m_operatorId(DEFAULT_OPERATOR_ID) // 默认操作员ID
 {
     ui->setupUi(this);
     dbHelper = new DBHelper(this);
-    initModel(); // 初始化数据模型
-
-    // 绑定筛选信号（搜索框文本变化）
+    initModel();
     connect(ui->selectEdit, &QLineEdit::textChanged, this, &Bookmgr::on_selectEdit_textChanged);
 }
 
@@ -120,31 +175,38 @@ Bookmgr::~Bookmgr()
 
 void Bookmgr::initModel()
 {
-    // 1. 原始模型（绑定book表）
     bookModel = new QSqlTableModel(this, dbHelper->isConnected() ? dbHelper->getDatabase() : QSqlDatabase());
-    bookModel->setTable("book");
-    bookModel->setEditStrategy(QSqlTableModel::OnManualSubmit); // 手动提交修改
-    bookModel->select(); // 加载数据
+    bookModel->setTable("Book"); // 新表名
+    bookModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    bookModel->select();
 
-    // 2. 设置列名
+    // 设置列名（适配新表字段）
     bookModel->setHeaderData(0, Qt::Horizontal, "图书ID");
-    bookModel->setHeaderData(1, Qt::Horizontal, "类型1");
-    bookModel->setHeaderData(2, Qt::Horizontal, "类型2");
-    bookModel->setHeaderData(3, Qt::Horizontal, "类型3");
-    bookModel->setHeaderData(4, Qt::Horizontal, "图片路径");
-    bookModel->setHeaderData(5, Qt::Horizontal, "图书名称");
-    bookModel->setHeaderData(6, Qt::Horizontal, "出版社");
-    bookModel->setHeaderData(7, Qt::Horizontal, "库存数量");
+    bookModel->setHeaderData(1, Qt::Horizontal, "ISBN");
+    bookModel->setHeaderData(2, Qt::Horizontal, "图书名称");
+    bookModel->setHeaderData(3, Qt::Horizontal, "作者");
+    bookModel->setHeaderData(4, Qt::Horizontal, "出版社");
+    bookModel->setHeaderData(5, Qt::Horizontal, "出版日期");
+    bookModel->setHeaderData(6, Qt::Horizontal, "分类");
+    bookModel->setHeaderData(7, Qt::Horizontal, "子分类");
+    bookModel->setHeaderData(8, Qt::Horizontal, "标签");
+    bookModel->setHeaderData(9, Qt::Horizontal, "价格");
+    bookModel->setHeaderData(10, Qt::Horizontal, "库存");
+    bookModel->setHeaderData(11, Qt::Horizontal, "状态");
+    bookModel->setHeaderData(12, Qt::Horizontal, "逾期费率");
+    bookModel->setHeaderData(13, Qt::Horizontal, "封面路径");
+    bookModel->setHeaderData(14, Qt::Horizontal, "描述");
 
-    // 3. 筛选代理模型（支持多条件筛选）
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(bookModel);
-    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive); // 不区分大小写
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-    // 4. 绑定到TableView
     ui->booktableView->setModel(proxyModel);
-    ui->booktableView->setColumnWidth(5, 150); // 图书名称列加宽
-    ui->booktableView->setSortingEnabled(true); // 允许排序
+    ui->booktableView->setColumnWidth(2, 180); // 图书名称列加宽
+    ui->booktableView->setColumnWidth(14, 200); // 描述列加宽
+    ui->booktableView->setSortingEnabled(true);
+    // 隐藏部分不常用列（可根据需求调整）
+    ui->booktableView->hideColumn(13); // 封面路径
 }
 
 int Bookmgr::getSelectedBookId()
@@ -154,7 +216,6 @@ int Bookmgr::getSelectedBookId()
         QMessageBox::warning(this, "警告", "请选中一行图书！");
         return -1;
     }
-    // 从代理模型转换到原始模型的索引，获取bookid
     QModelIndex sourceIndex = proxyModel->mapToSource(selected.first());
     return bookModel->data(bookModel->index(sourceIndex.row(), 0)).toInt();
 }
@@ -165,20 +226,22 @@ void Bookmgr::on_btnadd_clicked()
     BookEditDialog dialog(this, true);
     if (dialog.exec() == QDialog::Accepted) {
         QStringList info = dialog.getBookInfo();
-        // 空值校验
-        if (info[0].isEmpty() || info[5].isEmpty() || info[7].isEmpty()) {
-            QMessageBox::warning(this, "警告", "图书ID、名称、库存不能为空！");
+        // 必填字段校验（图书ID、ISBN、名称、库存）
+        if (info[0].isEmpty() || info[1].isEmpty() || info[2].isEmpty() || info[10].toInt() < 0) {
+            QMessageBox::warning(this, "警告", "图书ID、ISBN、名称不能为空，库存不能为负！");
             return;
         }
         // 调用DBHelper添加
         bool success = dbHelper->insertBook(
-            info[0].toInt(), info[1], info[2], info[3], info[4], info[5], info[6], info[7].toInt()
+            info[0].toInt(), info[1], info[2], info[3], info[4], info[5],
+            info[6], info[7], info[8], info[9].toDouble(), info[10].toInt(),
+            info[11], info[12].toDouble(), info[13], info[14]
             );
         if (success) {
             QMessageBox::information(this, "成功", "图书添加成功！");
-            bookModel->select(); // 刷新表格
+            bookModel->select();
         } else {
-           QMessageBox::critical(this, "失败", "图书添加失败：" + dbHelper->getDatabase().lastError().text());
+            QMessageBox::critical(this, "失败", "图书添加失败：" + dbHelper->getDatabase().lastError().text());
         }
     }
 }
@@ -186,18 +249,19 @@ void Bookmgr::on_btnadd_clicked()
 // 修改图书
 void Bookmgr::on_btnchange_clicked()
 {
-    int bookid = getSelectedBookId();
-    if (bookid == -1) return;
-
-    BookEditDialog dialog(this, false, bookid);
+    int book_id = getSelectedBookId();
+    if (book_id == -1) return;
+    BookEditDialog dialog(this, false, book_id);
     if (dialog.exec() == QDialog::Accepted) {
         QStringList info = dialog.getBookInfo();
-        if (info[5].isEmpty() || info[7].isEmpty()) {
-            QMessageBox::warning(this, "警告", "图书名称、库存不能为空！");
+        if (info[2].isEmpty() || info[10].toInt() < 0) {
+            QMessageBox::warning(this, "警告", "图书名称不能为空，库存不能为负！");
             return;
         }
         bool success = dbHelper->updateBook(
-            bookid, info[1], info[2], info[3], info[4], info[5], info[6], info[7].toInt()
+            book_id, info[1], info[2], info[3], info[4], info[5],
+            info[6], info[7], info[8], info[9].toDouble(), info[10].toInt(),
+            info[11], info[12].toDouble(), info[13], info[14]
             );
         if (success) {
             QMessageBox::information(this, "成功", "图书修改成功！");
@@ -211,78 +275,97 @@ void Bookmgr::on_btnchange_clicked()
 // 删除图书
 void Bookmgr::on_btndelete_clicked()
 {
-    int bookid = getSelectedBookId();
-    if (bookid == -1) return;
-
-    if (QMessageBox::question(this, "确认", "确定要删除该图书吗？", QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
+    int book_id = getSelectedBookId();
+    if (book_id == -1) return;
+    if (QMessageBox::question(this, "确认", "确定要删除该图书吗？（已借阅的图书无法删除）", QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) {
         return;
     }
-
-    bool success = dbHelper->deleteBook(bookid);
+    bool success = dbHelper->deleteBook(book_id);
     if (success) {
         QMessageBox::information(this, "成功", "图书删除成功！");
         bookModel->select();
     } else {
-        QMessageBox::critical(this, "失败", "图书删除失败！");
+        QMessageBox::critical(this, "失败", "图书删除失败（可能存在未归还的借阅记录）！");
     }
 }
 
-// 借书功能
+// 借书功能（补充due_date和operator_id）
 void Bookmgr::on_btnborrow_clicked()
 {
-    int bookid = getSelectedBookId();
-    if (bookid == -1) return;
+    int book_id = getSelectedBookId();
+    if (book_id == -1) return;
 
     // 输入读者ID
     bool ok;
     QString useridStr = QInputDialog::getText(this, "借书", "请输入读者ID：", QLineEdit::Normal, "", &ok);
     if (!ok || useridStr.isEmpty()) return;
-    int userid = useridStr.toInt();
+    int user_id = useridStr.toInt();
 
-    // 检查读者是否存在
+    // 检查读者是否存在且状态正常
     QSqlQuery userQuery = dbHelper->filterUsers(useridStr);
-    if (!userQuery.next()) {
-        QMessageBox::warning(this, "警告", "该读者不存在！");
+    if (!userQuery.next() || userQuery.value("account_status").toString() != "normal") {
+        QMessageBox::warning(this, "警告", "该读者不存在或账户已禁用！");
         return;
     }
 
+    // 计算借阅日期和应还日期（默认30天）
+    QString borrow_date = QDate::currentDate().toString("yyyy-MM-dd");
+    QString due_date = QDate::currentDate().addDays(OVERDUE_DAYS).toString("yyyy-MM-dd");
+
     // 执行借书
-    QString startDate = QDate::currentDate().toString("yyyy-MM-dd");
-    bool success = dbHelper->borrowBook(bookid, userid, startDate);
+    bool success = dbHelper->borrowBook(book_id, user_id, m_operatorId, borrow_date, due_date);
     if (success) {
-        QMessageBox::information(this, "成功", "借书成功！\n借阅日期：" + startDate);
-        bookModel->select(); // 刷新库存
+        QMessageBox::information(this, "成功",
+                                 QString("借书成功！\n借阅日期：%1\n应还日期：%2").arg(borrow_date).arg(due_date));
+        bookModel->select();
     } else {
         QMessageBox::critical(this, "失败", "借书失败（库存不足或数据错误）！");
     }
 }
 
-// 还书功能
+// 还书功能（补充逾期罚金计算）
 void Bookmgr::on_btnreturn_clicked()
 {
-    int bookid = getSelectedBookId();
-    if (bookid == -1) return;
+    int book_id = getSelectedBookId();
+    if (book_id == -1) return;
 
     // 输入读者ID
     bool ok;
     QString useridStr = QInputDialog::getText(this, "还书", "请输入读者ID：", QLineEdit::Normal, "", &ok);
     if (!ok || useridStr.isEmpty()) return;
-    int userid = useridStr.toInt();
+    int user_id = useridStr.toInt();
 
     // 执行还书
-    bool success = dbHelper->returnBook(bookid, userid);
+    bool success = dbHelper->returnBook(book_id, user_id);
     if (success) {
-        QMessageBox::information(this, "成功", "还书成功！\n归还日期：" + QDate::currentDate().toString("yyyy-MM-dd"));
-        bookModel->select(); // 刷新库存
+        // 查询罚金信息
+        QSqlQuery query;
+        query.prepare(R"(
+            SELECT overdue_days, fine_amount FROM BorrowRecord
+            WHERE book_id=:book_id AND user_id=:user_id AND borrow_status IN ('returned', 'overdue')
+            ORDER BY return_date DESC LIMIT 1
+        )");
+        query.bindValue(":book_id", book_id);
+        query.bindValue(":user_id", user_id);
+        query.exec();
+        query.next();
+        int overdue_days = query.value("overdue_days").toInt();
+        double fine_amount = query.value("fine_amount").toDouble();
+
+        QString msg = QString("还书成功！\n归还日期：%1").arg(QDate::currentDate().toString("yyyy-MM-dd"));
+        if (overdue_days > 0) {
+            msg += QString("\n逾期天数：%1天\n应缴罚金：%2元").arg(overdue_days).arg(fine_amount, 0, 'f', 2);
+        }
+        QMessageBox::information(this, "成功", msg);
+        bookModel->select();
     } else {
         QMessageBox::critical(this, "失败", "还书失败（无匹配借阅记录）！");
     }
 }
 
-// 筛选图书（搜索框文本变化）
+// 筛选图书
 void Bookmgr::on_selectEdit_textChanged(const QString &arg1)
 {
-    // 多列筛选：图书名称、类型1-3、出版社
-    proxyModel->setFilterKeyColumn(-1); // -1表示所有列
-    proxyModel->setFilterFixedString(arg1); // 精确匹配（可改为setFilterRegExp实现模糊匹配）
+    proxyModel->setFilterKeyColumn(-1);
+    proxyModel->setFilterFixedString(arg1);
 }
