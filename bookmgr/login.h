@@ -22,6 +22,7 @@ private slots:
 
 private:
     Ui::Login *ui;
+    DBHelper *dbHelper;
 };
 
 #endif // LOGIN_H
