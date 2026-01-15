@@ -67,7 +67,7 @@ void Record::initModel()
     ui->borrowtableView->setSortingEnabled(true);
 }
 
-// 逾期提醒函数（保留功能，改为手动触发）
+// 逾期提醒函数（改为手动触发）
 void Record::showOverdueAlert()
 {
     QSqlQuery overdueQuery = dbHelper->queryOverdueRecords();
