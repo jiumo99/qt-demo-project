@@ -199,12 +199,17 @@ QSqlQuery DBHelper::filterUsers(const QString &key)
 bool DBHelper::verifyLogin(const QString &username, const QString &password)
 {
     QSqlQuery query;
-    query.prepare("SELECT * FROM user WHERE username=:username AND password=:password");
-    query.bindValue(":username", username);
-    query.bindValue(":password", password);
-    query.exec();
+    // 关键修改：把查询条件从 username 改成 nickname（匹配新表的“登录账号字段”）
+    query.prepare("SELECT * FROM user WHERE nickname=:loginAccount AND password=:loginPwd");
+    query.bindValue(":loginAccount", username); // 用户输入的“账号”对应表的 nickname 字段
+    query.bindValue(":loginPwd", password);
 
-    return query.next(); // 存在匹配记录则返回true
+    // 可选：添加调试信息，方便排查（登录失败时查看原因）
+    if (!query.exec()) {
+        qDebug() << "登录查询失败：" << query.lastError().text();
+        return false;
+    }
+    return query.next(); // 存在匹配记录则登录成功
 }
 
 // ========== 借阅记录表操作 ==========
