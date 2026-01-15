@@ -9,7 +9,7 @@
 #include <QDateEdit>
 #include <QDoubleSpinBox>
 #include <QComboBox>
-#include <QTextEdit>
+#include <QTextEdit> // 必须包含，否则QTextEdit识别失败
 #include "dbhelper.h"
 
 namespace Ui {
@@ -27,7 +27,6 @@ public:
 private:
     bool m_isAdd;
     int m_book_id;
-    // 新增：适配新表字段的控件
     QLineEdit *leBookId;
     QLineEdit *leIsbn;
     QLineEdit *leBookName;
@@ -42,19 +41,23 @@ private:
     QComboBox *cbBookStatus;
     QDoubleSpinBox *dsbOverdueFeeRate;
     QLineEdit *leCoverPath;
-    QTextEdit *teDescription;
+    QTextEdit *teDescription; // 图书描述
     QPushButton *btnOk;
     QPushButton *btnCancel;
 };
 
 class Bookmgr : public QWidget
 {
-    Q_OBJECT
+    Q_OBJECT // 必须有这个宏才能使用信号槽
+
 public:
     explicit Bookmgr(QWidget *parent = nullptr);
     ~Bookmgr();
-    // 新增：设置当前操作员ID（从登录用户获取）
     void setOperatorId(int operatorId) { m_operatorId = operatorId; }
+
+    // ========== 新增：信号声明 ==========
+signals:
+    void borrowReturnSuccess(); // 借阅/归还成功的信号
 
 private slots:
     void on_btnadd_clicked();
@@ -69,8 +72,9 @@ private:
     DBHelper *dbHelper;
     QSqlTableModel *bookModel;
     QSortFilterProxyModel *proxyModel;
-    int m_operatorId; // 新增：当前操作员ID
+    int m_operatorId; // 当前操作员ID
     void initModel();
     int getSelectedBookId();
 };
+
 #endif // BOOKMGR_H

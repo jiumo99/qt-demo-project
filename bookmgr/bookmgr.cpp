@@ -318,6 +318,8 @@ void Bookmgr::on_btnborrow_clicked()
         QMessageBox::information(this, "成功",
                                  QString("借书成功！\n借阅日期：%1\n应还日期：%2").arg(borrow_date).arg(due_date));
         bookModel->select();
+        // ========== 新增：发射借阅成功信号 ==========
+        emit borrowReturnSuccess();
     } else {
         QMessageBox::critical(this, "失败", "借书失败（库存不足或数据错误）！");
     }
@@ -358,6 +360,8 @@ void Bookmgr::on_btnreturn_clicked()
         }
         QMessageBox::information(this, "成功", msg);
         bookModel->select();
+        // ========== 新增：发射还书成功信号 ==========
+        emit borrowReturnSuccess();
     } else {
         QMessageBox::critical(this, "失败", "还书失败（无匹配借阅记录）！");
     }
