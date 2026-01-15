@@ -16,7 +16,8 @@ Record::Record(QWidget *parent)
     ui->setupUi(this);
     dbHelper = new DBHelper(this);
     initModel();
-    showOverdueAlert();
+    // ========== 注释/删除这行：移除登录后自动弹出的逾期提醒 ==========
+    // showOverdueAlert();
 }
 
 Record::~Record()
@@ -54,6 +55,7 @@ void Record::initModel()
     ui->borrowtableView->setSortingEnabled(true);
 }
 
+// 逾期提醒函数（保留功能，改为手动触发）
 void Record::showOverdueAlert()
 {
     QSqlQuery overdueQuery = dbHelper->queryOverdueRecords();
@@ -71,6 +73,8 @@ void Record::showOverdueAlert()
     }
     if (overdueCnt > 0) {
         QMessageBox::warning(this, "逾期提醒", QString("共%1条逾期记录！\n%2").arg(overdueCnt).arg(overdueInfo));
+    } else {
+        QMessageBox::information(this, "逾期提醒", "暂无逾期借阅记录！");
     }
 }
 
@@ -138,9 +142,12 @@ void Record::on_btndatastatistics_clicked()
     delete statDialog;
 }
 
-// 查看逾期记录
+// ========== 修改：点击“查看逾期记录”按钮时，先显示记录+弹出提醒 ==========
 void Record::on_btncheckrecord_clicked()
 {
     recordModel->setQuery(dbHelper->queryOverdueRecords());
-    QMessageBox::information(this, "逾期记录", "已显示所有逾期借阅记录！");
+    // 手动触发逾期提醒弹窗
+    showOverdueAlert();
+    // 移除原有的简单提示（避免重复弹窗）
+    // QMessageBox::information(this, "逾期记录", "已显示所有逾期借阅记录！");
 }
