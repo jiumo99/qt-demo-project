@@ -28,7 +28,7 @@ bool DBHelper::isConnected() const
 void DBHelper::createTables()
 {
     QSqlQuery query;
-    // 1. 用户表(User) - 新结构
+    // 1. 用户表(User)
     QString createUserTable = R"(
         CREATE TABLE IF NOT EXISTS User (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,7 +46,7 @@ void DBHelper::createTables()
             update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
     )";
-    // 2. 图书表(Book) - 新结构
+    // 2. 图书表(Book)
     QString createBookTable = R"(
         CREATE TABLE IF NOT EXISTS Book (
             book_id INTEGER PRIMARY KEY AUTOINCREMENT,
