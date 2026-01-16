@@ -97,17 +97,17 @@ void usermgr::on_btnimportuser_clicked()
     QTextStream in(&file);
     int successCnt = 0;
     int failCnt = 0;
-    in.readLine(); // 跳过表头
+    in.readLine();
 
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
         if (line.isEmpty()) continue;
         QStringList fields = line.split(",");
-        if (fields.size() != 11) { // 新表11个核心字段
+        if (fields.size() != 11) {
             failCnt++;
             continue;
         }
-        // 解析字段（按新表顺序）
+        // 解析字段
         int user_id = fields[0].toInt();
         QString username = fields[1];
         QString password = fields[2];
