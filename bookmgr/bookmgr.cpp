@@ -176,7 +176,7 @@ Bookmgr::~Bookmgr()
 void Bookmgr::initModel()
 {
     bookModel = new QSqlTableModel(this, dbHelper->isConnected() ? dbHelper->getDatabase() : QSqlDatabase());
-    bookModel->setTable("Book"); // 新表名
+    bookModel->setTable("Book");
     bookModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     bookModel->select();
 
