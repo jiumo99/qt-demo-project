@@ -241,14 +241,14 @@ QPushButton {
     background-color: #409eff; /* 默认蓝色背景 */
 }
 
-/* 登录按钮 - btnLogin (注意Login首字母大写) */
+/* 登录按钮 - btnLogin */
 QPushButton#btnLogin {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                stop:0 #2463eb, stop:1 #409eff);
     box-shadow: 0 2px 6px rgba(64, 158, 255, 0.3);
 }
 
-/* 退出按钮 - btnexit (注意exit全小写) */
+/* 退出按钮 - btnexit */
 QPushButton#btnexit {
     background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
                                stop:0 #409eff, stop:1 #79bbff);
@@ -276,6 +276,40 @@ QWidget#widget_2 {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     border: 1px solid #ebeef5;
     padding: 25px 30px;
+}
+
+/* ========== QMessageBox 样式 ========== */
+/* 使用!important强制覆盖 */
+QMessageBox {
+    background-color: #ffffff !important;
+    border: 1px solid #dcdfe6 !important;
+    border-radius: 8px !important;
+    font-family: &quot;Microsoft YaHei&quot;, sans-serif !important;
+}
+
+QMessageBox QLabel {
+    color: #303133 !important;
+    font-size: 14px !important;
+    min-width: 200px !important;
+    min-height: 30px !important;
+}
+
+QMessageBox QPushButton {
+    background-color: #409eff !important;
+    color: white !important;
+    border-radius: 4px !important;
+    border: none !important;
+    padding: 6px 15px !important;
+    font-size: 12px !important;
+    min-width: 70px !important;
+}
+
+QMessageBox QPushButton:hover {
+    background-color: #66b1ff !important;
+}
+
+QMessageBox QPushButton:pressed {
+    background-color: #3a8ee6 !important;
 }</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">

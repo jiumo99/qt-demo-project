@@ -226,31 +226,42 @@ void Bookmgr::on_btnadd_clicked()
     BookEditDialog dialog(this, true);
     if (dialog.exec() == QDialog::Accepted) {
         QStringList info = dialog.getBookInfo();
-        // 必填字段校验（图书ID、ISBN、名称、库存）
-        if (info[0].isEmpty() || info[1].isEmpty() || info[2].isEmpty() || info[10].toInt() < 0) {
-            QMessageBox::warning(this, "警告", "图书ID、ISBN、名称不能为空，库存不能为负！");
+        // 必填字段校验
+        if (info[1].isEmpty() || info[2].isEmpty() || info[10].toInt() < 0) {
+            QMessageBox::warning(this, "警告", "ISBN、图书名称不能为空，库存不能为负！");
             return;
         }
+
+        // 获取图书ID，如果为空则使用-1（表示自增）
+        int book_id = -1;
+        if (!info[0].isEmpty()) {
+            book_id = info[0].toInt();
+        }
+
         // 调用DBHelper添加
         bool success = dbHelper->insertBook(
-            info[0].toInt(), info[1], info[2], info[3], info[4], info[5],
+            book_id, info[1], info[2], info[3], info[4], info[5],
             info[6], info[7], info[8], info[9].toDouble(), info[10].toInt(),
             info[11], info[12].toDouble(), info[13], info[14]
             );
+
         if (success) {
             QMessageBox::information(this, "成功", "图书添加成功！");
             bookModel->select();
         } else {
-            QMessageBox::critical(this, "失败", "图书添加失败：" + dbHelper->getDatabase().lastError().text());
+            QMessageBox::critical(this, "失败",
+                                  QString("图书添加失败：%1").arg(dbHelper->getDatabase().lastError().text()));
         }
     }
 }
 
 // 修改图书
+// 修改图书
 void Bookmgr::on_btnchange_clicked()
 {
     int book_id = getSelectedBookId();
     if (book_id == -1) return;
+
     BookEditDialog dialog(this, false, book_id);
     if (dialog.exec() == QDialog::Accepted) {
         QStringList info = dialog.getBookInfo();
@@ -258,16 +269,19 @@ void Bookmgr::on_btnchange_clicked()
             QMessageBox::warning(this, "警告", "图书名称不能为空，库存不能为负！");
             return;
         }
+
         bool success = dbHelper->updateBook(
             book_id, info[1], info[2], info[3], info[4], info[5],
             info[6], info[7], info[8], info[9].toDouble(), info[10].toInt(),
             info[11], info[12].toDouble(), info[13], info[14]
             );
+
         if (success) {
             QMessageBox::information(this, "成功", "图书修改成功！");
             bookModel->select();
         } else {
-            QMessageBox::critical(this, "失败", "图书修改失败！");
+            QMessageBox::critical(this, "失败",
+                                  QString("图书修改失败：%1").arg(dbHelper->getDatabase().lastError().text()));
         }
     }
 }

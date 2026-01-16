@@ -1,0 +1,16 @@
+user_id,username,password,nickname,role,class,major,gender,phone,email,account_status
+201,lihua,123456,李华,student,英语2021-1班,英语文学,女,13912345678,lihua@example.com,normal
+202,zhangwei,123456,张伟,student,物理2021-2班,物理学,男,13987654321,zhangwei@example.com,normal
+203,wangfang,123456,王芳,student,化学2021-3班,化学工程,女,13800123456,wangfang@example.com,normal
+204,liuming,123456,刘明,student,数学2021-4班,数学与应用数学,男,13711223344,liuming@example.com,normal
+205,chenjing,123456,陈静,student,生物2021-5班,生物科学,女,13655667788,chenjing@example.com,disabled
+206,zhouyang,123456,周阳,student,历史2021-6班,历史学,男,13599887766,zhouyang@example.com,normal
+207,sunlei,123456,孙磊,student,哲学2021-7班,哲学,男,13411223355,sunlei@example.com,normal
+208,qianna,123456,钱娜,student,经济2021-8班,经济学,女,13344556677,qianna@example.com,normal
+209,wuyong,123456,吴勇,student,管理2021-9班,工商管理,男,13277889900,wuyong@example.com,normal
+210,zhengxiao,123456,郑晓,student,法学2021-10班,法学,女,13100998877,zhengxiao@example.com,normal
+211,admin002,admin456,系统管理员,admin,,-,未知,13012345678,admin2@lib.com,normal
+212,lib_manager,library123,图书管理员,admin,,-,女,13087654321,libmanager@lib.com,normal
+213,student001,student123,测试学生1,student,测试班-1,测试专业,男,13011223344,test1@example.com,disabled
+214,student002,student123,测试学生2,student,测试班-2,测试专业,女,13055667788,test2@example.com,normal
+215,student003,student123,测试学生3,student,测试班-3,测试专业,男,13099887766,test3@example.com,normal
