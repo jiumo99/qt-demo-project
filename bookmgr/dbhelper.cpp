@@ -68,7 +68,7 @@ void DBHelper::createTables()
             update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
     )";
-    // 3. 借阅记录表(BorrowRecord) - 新结构
+    // 3. 借阅记录表(BorrowRecord)
     QString createRecordTable = R"(
         CREATE TABLE IF NOT EXISTS BorrowRecord (
             record_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -87,7 +87,7 @@ void DBHelper::createTables()
             FOREIGN KEY(operator_id) REFERENCES User(user_id) ON DELETE RESTRICT
         );
     )";
-    // 4. 索引（按新表优化）
+    // 4. 索引
     QString createIndexes = R"(
         CREATE INDEX IF NOT EXISTS idx_book_category ON Book(category);
         CREATE INDEX IF NOT EXISTS idx_book_sub_category ON Book(sub_category);
@@ -314,7 +314,7 @@ query.bindValue(":book_id", book_id);
 query.bindValue(":user_id", user_id);
 if (!query.exec() || !query.next()) return false;
 
-// 2. 计算逾期天数和罚金（删除了borrowDate相关代码）
+// 2. 计算逾期天数和罚金
 int record_id = query.value("record_id").toInt();
 QDate dueDate = QDate::fromString(query.value("due_date").toString().left(10), "yyyy-MM-dd");
 QDate returnDate = QDate::currentDate();

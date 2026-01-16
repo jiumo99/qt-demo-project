@@ -205,7 +205,7 @@ void Bookmgr::initModel()
     ui->booktableView->setColumnWidth(2, 180); // 图书名称列加宽
     ui->booktableView->setColumnWidth(14, 200); // 描述列加宽
     ui->booktableView->setSortingEnabled(true);
-    // 隐藏部分不常用列（可根据需求调整）
+    // 隐藏部分不常用列
     ui->booktableView->hideColumn(13); // 封面路径
 }
 
