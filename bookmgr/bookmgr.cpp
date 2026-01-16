@@ -353,7 +353,6 @@ void Bookmgr::on_btnreturn_clicked()
         if (query.exec() && query.next()) {
             int overdue_days = query.value("overdue_days").toInt();
             double fine_amount = query.value("fine_amount").toDouble();
-
             QString msg = QString("还书成功！\n归还日期：%1").arg(QDate::currentDate().toString("yyyy-MM-dd"));
             if (overdue_days > 0) {
                 msg += QString("\n逾期天数：%1天\n应缴罚金：%2元").arg(overdue_days).arg(fine_amount, 0, 'f', 2);
