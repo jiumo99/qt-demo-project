@@ -24,7 +24,7 @@ bool DBHelper::isConnected() const
     return db.isOpen();
 }
 
-// 同步创建新表结构（完全替换旧表SQL）
+// 同步创建新表结构
 void DBHelper::createTables()
 {
     QSqlQuery query;
