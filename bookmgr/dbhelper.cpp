@@ -112,13 +112,24 @@ bool DBHelper::insertBook(int book_id, const QString& isbn, const QString& book_
                           const QString& description)
 {
     QSqlQuery query;
-    query.prepare(R"(
-        INSERT INTO Book (book_id, isbn, book_name, author, publisher, publish_date, category,
-                          sub_category, tags, price, stock, book_status, overdue_fee_rate, cover_path, description)
-        VALUES (:book_id, :isbn, :book_name, :author, :publisher, :publish_date, :category,
-                :sub_category, :tags, :price, :stock, :book_status, :overdue_fee_rate, :cover_path, :description)
-    )");
-    query.bindValue(":book_id", book_id);
+    // 如果book_id为-1或0，让数据库自增
+    if (book_id <= 0) {
+        query.prepare(R"(
+            INSERT INTO Book (isbn, book_name, author, publisher, publish_date, category,
+                              sub_category, tags, price, stock, book_status, overdue_fee_rate, cover_path, description)
+            VALUES (:isbn, :book_name, :author, :publisher, :publish_date, :category,
+                    :sub_category, :tags, :price, :stock, :book_status, :overdue_fee_rate, :cover_path, :description)
+        )");
+    } else {
+        query.prepare(R"(
+            INSERT INTO Book (book_id, isbn, book_name, author, publisher, publish_date, category,
+                              sub_category, tags, price, stock, book_status, overdue_fee_rate, cover_path, description)
+            VALUES (:book_id, :isbn, :book_name, :author, :publisher, :publish_date, :category,
+                    :sub_category, :tags, :price, :stock, :book_status, :overdue_fee_rate, :cover_path, :description)
+        )");
+        query.bindValue(":book_id", book_id);
+    }
+
     query.bindValue(":isbn", isbn);
     query.bindValue(":book_name", book_name);
     query.bindValue(":author", author);
@@ -133,7 +144,13 @@ bool DBHelper::insertBook(int book_id, const QString& isbn, const QString& book_
     query.bindValue(":overdue_fee_rate", overdue_fee_rate);
     query.bindValue(":cover_path", cover_path);
     query.bindValue(":description", description);
-    return query.exec();
+
+    bool success = query.exec();
+    if (!success) {
+        qDebug() << "插入图书失败：" << query.lastError().text()
+            << "，SQL:" << query.lastQuery();
+    }
+    return success;
 }
 
 bool DBHelper::updateBook(int book_id, const QString& isbn, const QString& book_name, const QString& author,
@@ -202,11 +219,20 @@ bool DBHelper::insertUser(int user_id, const QString& username, const QString& p
                           const QString& phone, const QString& email, const QString& account_status)
 {
     QSqlQuery query;
-    query.prepare(R"(
-        INSERT INTO User (user_id, username, password, nickname, role, class, major, gender, phone, email, account_status)
-        VALUES (:user_id, :username, :password, :nickname, :role, :class, :major, :gender, :phone, :email, :account_status)
-    )");
-    query.bindValue(":user_id", user_id);
+    // 如果user_id为-1或0，让数据库自增
+    if (user_id <= 0) {
+        query.prepare(R"(
+            INSERT INTO User (username, password, nickname, role, class, major, gender, phone, email, account_status)
+            VALUES (:username, :password, :nickname, :role, :class, :major, :gender, :phone, :email, :account_status)
+        )");
+    } else {
+        query.prepare(R"(
+            INSERT INTO User (user_id, username, password, nickname, role, class, major, gender, phone, email, account_status)
+            VALUES (:user_id, :username, :password, :nickname, :role, :class, :major, :gender, :phone, :email, :account_status)
+        )");
+        query.bindValue(":user_id", user_id);
+    }
+
     query.bindValue(":username", username);
     query.bindValue(":password", password);
     query.bindValue(":nickname", nickname);
@@ -217,7 +243,13 @@ bool DBHelper::insertUser(int user_id, const QString& username, const QString& p
     query.bindValue(":phone", phone);
     query.bindValue(":email", email);
     query.bindValue(":account_status", account_status);
-    return query.exec();
+
+    bool success = query.exec();
+    if (!success) {
+        qDebug() << "插入用户失败：" << query.lastError().text()
+            << "，SQL:" << query.lastQuery();
+    }
+    return success;
 }
 
 bool DBHelper::deleteUser(int user_id)

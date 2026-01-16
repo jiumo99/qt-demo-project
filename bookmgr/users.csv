@@ -1,0 +1,6 @@
+user_id,username,password,nickname,role,class,major,gender,phone,email,account_status
+101,zhangsan,123456,张三,student,计算机2021-1班,计算机科学与技术,男,13800138001,zhangsan@example.com,normal
+102,lisi,123456,李四,student,软件2021-2班,软件工程,女,13800138002,lisi@example.com,normal
+103,wangwu,123456,王五,student,网络2021-3班,网络工程,男,13800138003,wangwu@example.com,normal
+104,zhaoliu,123456,赵六,student,数据2021-4班,数据科学,女,13800138004,zhaoliu@example.com,disabled
+105,admin001,admin123,管理员,admin,,-,未知,13800138005,admin@lib.com,normal

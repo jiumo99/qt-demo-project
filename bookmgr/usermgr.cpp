@@ -88,24 +88,36 @@ void usermgr::on_btnimportuser_clicked()
 {
     QString filePath = QFileDialog::getOpenFileName(this, "选择CSV文件", "", "CSV Files (*.csv)");
     if (filePath.isEmpty()) return;
+
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::critical(this, "失败", "文件打开失败！");
         return;
     }
+
     QTextStream in(&file);
     int successCnt = 0;
     int failCnt = 0;
-    in.readLine();
+
+    // 跳过标题行
+    QString header = in.readLine();
+    if (header.isEmpty()) {
+        QMessageBox::warning(this, "警告", "CSV文件为空或格式不正确！");
+        file.close();
+        return;
+    }
 
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
         if (line.isEmpty()) continue;
+
         QStringList fields = line.split(",");
         if (fields.size() != 11) {
+            qDebug() << "字段数量不正确：" << line;
             failCnt++;
             continue;
         }
+
         // 解析字段
         int user_id = fields[0].toInt();
         QString username = fields[1];
@@ -119,15 +131,27 @@ void usermgr::on_btnimportuser_clicked()
         QString email = fields[9];
         QString account_status = fields[10];
 
+        // 验证必填字段
+        if (username.isEmpty() || password.isEmpty()) {
+            qDebug() << "用户名或密码为空：" << line;
+            failCnt++;
+            continue;
+        }
+
         // 插入数据库
-        if (dbHelper->insertUser(user_id, username, password, nickname, role, class_, major, gender, phone, email, account_status)) {
+        if (dbHelper->insertUser(user_id, username, password, nickname, role,
+                                 class_, major, gender, phone, email, account_status)) {
             successCnt++;
         } else {
             failCnt++;
         }
     }
+
     file.close();
+
     QMessageBox::information(this, "导入结果",
                              QString("导入完成！\n成功：%1条\n失败：%2条").arg(successCnt).arg(failCnt));
+
+    // 刷新用户列表
     userModel->select();
 }
