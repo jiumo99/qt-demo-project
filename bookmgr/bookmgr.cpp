@@ -12,9 +12,9 @@ BookEditDialog::BookEditDialog(QWidget *parent, bool isAdd, int book_id)
     , m_book_id(book_id)
 {
     setWindowTitle(isAdd ? "添加图书" : "修改图书");
-    setFixedSize(500, 550); // 扩大窗口容纳新增字段
+    setFixedSize(500, 550);
 
-    // 布局与控件（按新表字段顺序排列）
+    // 布局与控件
     QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(10);
     layout->setContentsMargins(20, 20, 20, 20);
@@ -180,7 +180,7 @@ void Bookmgr::initModel()
     bookModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
     bookModel->select();
 
-    // 设置列名（适配新表字段）
+    // 设置列名
     bookModel->setHeaderData(0, Qt::Horizontal, "图书ID");
     bookModel->setHeaderData(1, Qt::Horizontal, "ISBN");
     bookModel->setHeaderData(2, Qt::Horizontal, "图书名称");
